@@ -1,6 +1,5 @@
 {
   "name": "dashboard",
-  "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -9,6 +8,7 @@
     "lint": "eslint .",
     "preview": "vite preview"
   },
+  "homepage": "https://zkpaycc.github.io/dashboard/",
   "dependencies": {
     "@coinbase/wallet-sdk": "^4.3.2",
     "@heroicons/react": "^2.2.0",
