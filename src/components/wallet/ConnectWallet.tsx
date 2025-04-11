@@ -42,9 +42,19 @@ const ConnectWallet: React.FC = () => {
   const navigate = useNavigate();
 
   const handleConnect = async (walletType: WalletType) => {
-    const connected = await connect(walletType);
-    setShowOptions(false);
-    if (connected) navigate('/');
+    try {
+      const connected = await connect(walletType);
+      setShowOptions(false);
+
+      if (connected) {
+        console.log("Successfully connected to wallet, redirecting to home...");
+        navigate('/');
+      } else {
+        console.log("Failed to connect to wallet");
+      }
+    } catch (error) {
+      console.error("Error in handleConnect:", error);
+    }
   };
 
   return (

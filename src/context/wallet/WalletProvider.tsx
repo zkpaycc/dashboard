@@ -6,6 +6,7 @@ import {
   connectMetaMask,
   connectCoinbaseWallet,
   connectWalletConnect,
+  disconnectWalletConnect,
   detectWallets
 } from '../../utils/walletUtils';
 import { WalletContext } from './WalletContext';
@@ -85,7 +86,7 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
           return false;
       }
 
-      if (info) {
+      if (info && info.address) {
         setWalletInfo(info);
         localStorage.setItem('connectedWallet', walletType);
         return true;
@@ -100,10 +101,15 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
   }, []);
 
   const disconnect = useCallback(() => {
+    // Properly disconnect WalletConnect if it's the current wallet
+    if (walletInfo?.walletType === 'WalletConnect') {
+      disconnectWalletConnect();
+    }
+
     setWalletInfo(null);
     setMerchantConfigs(undefined);
     localStorage.removeItem('connectedWallet');
-  }, []);
+  }, [walletInfo?.walletType]);
 
   const updateMerchantConfigs = useCallback((config: Partial<DefaultMerchantInfo>) => {
     setMerchantConfigs(prevConfigs => {
