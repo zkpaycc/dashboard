@@ -1,0 +1,13 @@
+name = "dashboard"
+compatibility_date = "2023-05-18"
+
+[site]
+bucket = "./dist"
+
+[build]
+command = "npm run build"
+
+[env.production]
+routes = [
+  { pattern = "*/*", zone_name = "zkpay.cc" }
+]
