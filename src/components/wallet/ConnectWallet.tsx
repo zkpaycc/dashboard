@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useWallet } from '../../hooks/useWallet';
 import Button from '../ui/Button';
 import Card from '../ui/Card';
@@ -39,17 +38,13 @@ const WalletIcon: React.FC<{ walletType: WalletType }> = ({ walletType }) => {
 const ConnectWallet: React.FC = () => {
   const { connect, connecting, availableWallets } = useWallet();
   const [showOptions, setShowOptions] = useState(false);
-  const navigate = useNavigate();
 
   const handleConnect = async (walletType: WalletType) => {
     try {
       const connected = await connect(walletType);
       setShowOptions(false);
 
-      if (connected) {
-        console.log("Successfully connected to wallet, redirecting to home...");
-        navigate('/');
-      } else {
+      if (!connected) {
         console.log("Failed to connect to wallet");
       }
     } catch (error) {

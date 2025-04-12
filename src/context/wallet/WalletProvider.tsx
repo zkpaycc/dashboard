@@ -12,6 +12,8 @@ import {
 import { WalletContext } from './WalletContext';
 import { DefaultMerchantInfo } from './walletTypes';
 
+export const CONNECTED_WALLET_KEY = 'connectedWallet';
+
 interface WalletProviderProps {
   children: ReactNode;
 }
@@ -31,9 +33,12 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
   useEffect(() => {
     const tryReconnect = async () => {
       const savedWallet = localStorage.getItem('connectedWallet');
+
       if (savedWallet) {
         try {
+          console.log('Reconnecting wallet:', savedWallet);
           await connect(savedWallet as WalletType);
+          // Don't handle redirects here - AuthRedirectHandler will take care of it
         } catch (error) {
           console.error('Failed to reconnect wallet:', error);
           localStorage.removeItem('connectedWallet');
@@ -70,6 +75,7 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
     setConnecting(true);
     try {
       let info: WalletInfo | null = null;
+      console.log('Connecting to wallet:', walletType);
 
       switch (walletType) {
         case 'MetaMask':
@@ -87,10 +93,12 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
       }
 
       if (info && info.address) {
+        console.log('Wallet connected successfully:', info.address);
         setWalletInfo(info);
-        localStorage.setItem('connectedWallet', walletType);
+        localStorage.setItem(CONNECTED_WALLET_KEY, walletType);
         return true;
       }
+      console.log('Wallet connection failed: No address returned');
       return false;
     } catch (error) {
       console.error('Error connecting wallet:', error);
@@ -108,7 +116,7 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
 
     setWalletInfo(null);
     setMerchantConfigs(undefined);
-    localStorage.removeItem('connectedWallet');
+    localStorage.removeItem(CONNECTED_WALLET_KEY);
   }, [walletInfo?.walletType]);
 
   const updateMerchantConfigs = useCallback((config: Partial<DefaultMerchantInfo>) => {

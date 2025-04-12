@@ -6,11 +6,14 @@ import PaymentCreatePage from './pages/PaymentCreatePage';
 import ProtectedRoute from './components/routing/ProtectedRoute';
 import { WalletProvider } from './context/wallet/WalletProvider';
 import PublicRoute from './components/routing/PublicRoute';
+import AuthRedirectHandler from './components/routing/AuthRedirectHandler';
 
 function App() {
   return (
     <BrowserRouter>
       <WalletProvider>
+        {/* This component will handle redirects after authentication */}
+        <AuthRedirectHandler />
         <Routes>
           <Route
             path="/"
