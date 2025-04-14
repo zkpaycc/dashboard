@@ -6,7 +6,7 @@ import Button from '../components/ui/Button';
 import { useWallet } from '../hooks/useWallet';
 import { useCreatePayment } from '../hooks/useCreatePayment';
 import { Chain, sepolia } from 'viem/chains';
-import { config } from "@zkpay/core";
+import { evmConfig } from "@zkpay/core";
 import { Address, PaymentParams, chainMap, extractTokenMetadata } from '@zkpay/sdk';
 import { isAddress } from 'ethers';
 import {
@@ -18,7 +18,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { DefaultMerchantInfo } from '../context/wallet/walletTypes';
 
-const availableChains: Chain[] = config.chains.map(c => chainMap.get(c.chainId)).filter(c => c) as Chain[];
+const availableChains: Chain[] = evmConfig.chains.map(c => chainMap.get(c.chainId)).filter(c => c) as Chain[];
 
 const PaymentCreatePage: React.FC = () => {
   const navigate = useNavigate();
